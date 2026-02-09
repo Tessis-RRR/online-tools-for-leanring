@@ -1,5 +1,5 @@
 {
-  "name": "my-worker",
+  "name": "online-tools-for-leanring",
   "compatibility_date": "2026-02-09",
   "main": "src/index.ts"
 }
