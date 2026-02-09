@@ -226,8 +226,8 @@ function isAllowedOrigin(origin) {
   // Allow Captivate preview
   if (/^http:\/\/localhost:\d+$/.test(origin)) return origin;
 
-  // ✅ YOUR GitHub Pages site (must be lowercase)
-  if (origin === "https://tessis-rrr.github.io") return origin;
+  // YOUR GitHub Pages site (must be lowercase)
+  if (origin === "https://Tessis-rrr/online-tools-for-learning.github.io") return origin;
 
   return null;
 }
