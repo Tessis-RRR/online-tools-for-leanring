@@ -279,3 +279,36 @@ function corsHeaders(origin) {
     "Access-Control-Allow-Headers": "Content-Type"
   };
 }
+
+
+//newly added
+export default {
+  async fetch(request, env) {
+    const origin = request.headers.get("Origin") || "";
+
+    const allowed = [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:8000",
+      // Add the exact localhost origin Captivate uses (see step 3)
+      // Add your published Captivate domain later (https://...)
+    ];
+
+    const corsHeaders = {
+      "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    };
+
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    // your normal logic here...
+    const res = new Response(JSON.stringify({ ok: true }), {
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+    return res;
+  },
+};
+
