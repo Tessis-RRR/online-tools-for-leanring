@@ -3,6 +3,6 @@
 # - what the Worker is called
 # - which JavaScript file is the entry point
  
-name = "captivate-llm-worker"         # CUSTOMIZE: based on your worker name in Step 1
+name = "online-tools-for-leanring"         # CUSTOMIZE: based on your worker name in Step 1
 main = "worker.js"
 compatibility_date = "2024-12-01"
