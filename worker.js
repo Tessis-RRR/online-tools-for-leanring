@@ -122,9 +122,10 @@ export default {
     // Students edit this.
     // Keep this prompt short and specific. Write your own instructions below.
     const systemPrompt =
-      "WRITE YOUR SYSTEM PROMPT HERE. " +
-      "Include: role, tone, and any safety or fairness rules. " +
-      "Also include: Return ONLY valid JSON (no markdown, no extra text).";
+      "You are an educational assessment assistant evaluating open-ended student responses using a provided learning objective, evaluation criteria, and rubric. " +
+      "Evaluate responses fairly, focus on conceptual accuracy and completeness, and avoid introducing new ideas or rewriting the learner’s text. " +
+      "Base judgments on the rubric and criteria, and provide clear, criterion-referenced explanatory feedback with one actionable next step. " +
+      "Return ONLY valid JSON (no markdown, no extra text).";
  
     // Students edit this.
     // This is where you include the values sent from the frontend.
@@ -133,12 +134,45 @@ export default {
       `Learning objective:\n${learningObjective}\n\n` +
       `Evaluation criteria:\n${criteria.map((c, i) => `${i + 1}. ${c}`).join("\n")}\n\n` +
       `Learner response:\n${responseText}\n\n` +
-      "WRITE YOUR INSTRUCTIONS HERE FOR HOW TO EVALUATE.\n" +
-      "Your output MUST be ONLY JSON with exactly these keys:\n" +
-      "- verdict (must be: Correct, Not quite right, or Incorrect)\n" +
-      "- summary (1 to 3 sentences, must reference the learning objective or criteria)\n" +
-      "- criteria_feedback (array of objects with: criterion, met, comment)\n" +
-      "- next_step (one concrete improvement suggestion)\n";
+      `WRITE YOUR INSTRUCTIONS HERE FOR HOW TO EVALUATE.\n` +
+      `Use the rubric below to guide your evaluation and feedback.\n\n` +
+      `RUBRIC (Total: 10 points)\n` +
+      `1) Understanding of Social Functionalism (0–3)\n` +
+      `- 3: Clearly explains social functionalism as a perspective that views education as contributing to social stability, cohesion, and the functioning of society.\n` +
+      `- 2: Generally accurate understanding but lacks depth or precision.\n` +
+      `- 1: Mentions functionalism but explanation is vague, superficial, or partially inaccurate.\n` +
+      `- 0: Does not demonstrate an understanding of social functionalism.\n\n` +
+      `2) Explanation of Educational Functions (0–3)\n` +
+      `- 3: Clearly explains two or more functions of education (e.g., socialization, skill provision, social placement/sorting, manifest or latent functions) and links them to societal stability/functioning.\n` +
+      `- 2: Explains one function well OR mentions two functions with limited explanation.\n` +
+      `- 1: Mentions functions but explanations are unclear, incorrect, or not linked to stability/functioning.\n` +
+      `- 0: Does not correctly identify any functions.\n\n` +
+      `3) Coherence and Structure (0–2)\n` +
+      `- 2: Well-organized (e.g., brief claim/intro → functions explained → link to stability → wrap-up); ideas flow logically.\n` +
+      `- 1: Some structure, but uneven development or loose connections.\n` +
+      `- 0: Lacks clear structure or logical flow.\n\n` +
+      `4) Sociological Language and Clarity (0–1)\n` +
+      `- 1: Uses relevant sociological terms accurately (e.g., socialization, cohesion, meritocracy, manifest/latent functions).\n` +
+      `- 0: Little/no relevant terminology or terms used inaccurately.\n\n` +
+      `5) Grammar and Writing Quality (0–1)\n` +
+      `- 1: Grammar/spelling/sentence clarity do not impede understanding.\n` +
+      `- 0: Frequent errors reduce clarity/readability.\n\n` +
+      `EVALUATION INSTRUCTIONS\n` +
+      `- Evaluate the learner response against the learning objective, the provided criteria list, and the rubric above.\n` +
+      `- Determine a verdict based on overall quality:\n` +
+      `  * Correct: Strongly meets the learning objective; typically aligns with most criteria and would score ~8–10 on the rubric.\n` +
+      `  * Not quite right: Partially meets the learning objective; key elements missing/underdeveloped; typically ~5–7.\n` +
+      `  * Incorrect: Does not meet the learning objective; major misconceptions or missing requirements; typically ~0–4.\n` +
+      `- In the summary, explicitly reference the learning objective or at least one evaluation criterion.\n` +
+      `- For criteria_feedback: for EACH provided criterion in the criteria list, output:\n` +
+      `  { "criterion": "<exact criterion text>", "met": true/false, "comment": "<brief, specific explanation tied to the rubric and learner text>" }\n` +
+      `- If the response fails to explain at least TWO functions of education, mark the relevant criterion as not met and state this explicitly in comments.\n` +
+      `- next_step must be ONE concrete, actionable improvement that would most increase the score (e.g., “Add a second function and link it to social stability using functionalist terms”).\n\n` +
+      `Your output MUST be ONLY JSON with exactly these keys:\n` +
+      `- verdict (must be: Correct, Not quite right, or Incorrect)\n` +
+      `- summary (1 to 3 sentences, must reference the learning objective or criteria)\n` +
+      `- criteria_feedback (array of objects with: criterion, met, comment)\n` +
+      `- next_step (one concrete improvement suggestion)\n`;
  
  
     // Call OpenAI Responses API (server-side).
@@ -231,7 +265,7 @@ function isAllowedOrigin(origin) {
   if (/^http:\/\/localhost:\d+$/.test(origin)) return origin;
  
   // Students MUST customize this line:
-  if (origin === "https://YOUR_GITHUB_USERNAME.github.io") return origin;
+  if (origin === "https://Tessis-RRR.github.io") return origin;
  
   return null;
 }
