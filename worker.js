@@ -226,5 +226,7 @@ function corsHeaders(origin) {
   if (!origin) return {};
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-C
-
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
