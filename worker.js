@@ -265,7 +265,7 @@ function isAllowedOrigin(origin) {
   if (/^http:\/\/localhost:\d+$/.test(origin)) return origin;
  
   // Students MUST customize this line:
-  if (origin === "https://Tessis-RRR.github.io") return origin;
+  if (origin === "https://github.com/Tessis-RRR") return origin;
  
   return null;
 }
