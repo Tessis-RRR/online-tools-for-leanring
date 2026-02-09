@@ -178,7 +178,7 @@ function isAllowedOrigin(origin) {
 
   // ✅ REPLACE THIS with your GitHub Pages origin if you publish there:
   // Example: https://shiyuzh2-afk.github.io
-  if (origin === "https://YOUR_USERNAME.github.io") return origin;
+  if (origin === "https://Tessis-RRR.github.io") return origin;
 
   return null;
 }
