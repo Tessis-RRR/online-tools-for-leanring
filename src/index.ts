@@ -223,11 +223,14 @@ function extractTextFromResponsesOutput(d) {
 function isAllowedOrigin(origin) {
   if (!origin) return null;
 
-  // Allow Captivate preview
+  // Allow Captivate preview on localhost
   if (/^http:\/\/localhost:\d+$/.test(origin)) return origin;
 
-  // YOUR GitHub Pages site (must be lowercase)
-  if (origin === "https://Tessis-rrr/online-tools-for-learning.github.io") return origin;
+  // Allow your GitHub Pages site
+  if (origin === "https://tessis-rrr.github.io") return origin;
+
+  // TEMP: allow calling the worker from its own domain (for console testing)
+  if (origin === "https://online-tools-for-learning.sz3561.workers.dev") return origin;
 
   return null;
 }
