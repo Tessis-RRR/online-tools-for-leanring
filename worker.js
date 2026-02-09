@@ -283,32 +283,47 @@ function corsHeaders(origin) {
 
 //newly added
 export default {
-  async fetch(request, env) {
-    const origin = request.headers.get("Origin") || "";
-
-    const allowed = [
-      "http://localhost:5173",
-      "http://localhost:3000",
-      "http://localhost:8000",
-      // Add the exact localhost origin Captivate uses (see step 3)
-      // Add your published Captivate domain later (https://...)
-    ];
+  async fetch(request) {
+    const origin = request.headers.get("Origin") || "*";
 
     const corsHeaders = {
-      "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : "*",
+      "Access-Control-Allow-Origin": origin,
       "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Headers": "Content-Type",
     };
 
+    // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    // your normal logic here...
-    const res = new Response(JSON.stringify({ ok: true }), {
-      headers: { "Content-Type": "application/json", ...corsHeaders },
-    });
-    return res;
+    // Only allow POST (Captivate uses POST)
+    if (request.method !== "POST") {
+      return new Response("Method Not Allowed", { status: 405, headers: corsHeaders });
+    }
+
+    // Read JSON body
+    let data;
+    try {
+      data = await request.json();
+    } catch (e) {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // TEMP: return a test JSON response so you can confirm Captivate receives it
+    return new Response(
+      JSON.stringify({
+        verdict: "Not quite right",
+        summary: "Test: your request reached the Worker. Next, connect OpenAI output.",
+        criteria_feedback: [],
+        next_step: "Now swap this test response with the OpenAI call."
+      }),
+      { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
+    );
   },
 };
+
 
